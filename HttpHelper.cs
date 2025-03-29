@@ -32,15 +32,34 @@
 
         public static HttpRequest GetRequestInfo(string msg)
         {
-            var msgArray = msg.Split(':','H','U','A');
+            var msgArray = msg.Split(Environment.NewLine);
 
-            return new HttpRequest
+            string[] keywords = ["Host:", "Accept:", "User-Agent:"];
+
+            string endpoint = msg.Substring(msg.IndexOf("/"), msg.LastIndexOf("HTTP") - msg.IndexOf("/"));
+
+            Dictionary<string, string> dict = new();
+
+            for(int i = 0; i < msgArray.Length; i++)
             {
-                Accept = msgArray[9].Trim(),
-                Endpoint = msgArray[0].Replace("GET", " ").Trim(),
-                Host = msgArray[3].Trim(),
-                UserAgent = msgArray[7].Trim()
+                for(int a = 0; a < keywords.Length; a++)
+                {
+                  if (msgArray[i].Contains(keywords[a]))
+                   {
+                    dict.Add(keywords[a].Replace(':', ' ').Trim(), msgArray[i].Replace(keywords[a], " ").Trim());
+                   }
+
+                }
+        
+            }
+
+            return new HttpRequest {
+                Endpoint = endpoint,
+                Accept = dict["Accept"],
+                UserAgent = dict["User-Agent"],
+                Host = dict["Host"]
             };
+
         }
     }
 }
