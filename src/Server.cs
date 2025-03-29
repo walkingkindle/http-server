@@ -16,7 +16,7 @@ while (true)
 
     await using NetworkStream stream = handler.GetStream();
    
-    var message = "HTTP/1.1 200 OK";
+    var message = "HTTP/1.1 200 OK\r\n\r\n";
     var dateTimeBytes = Encoding.UTF8.GetBytes(message);
     await stream.WriteAsync(dateTimeBytes);
 
