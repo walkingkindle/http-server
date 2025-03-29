@@ -45,15 +45,15 @@
             for(int i = 1; i < msgArray.Length; i++)
             {
               if (msgArray[i].Contains("Accept")){
-                  request.Accept = msgArray[i].Replace("Accept", " ").Trim();
+                  request.Accept = msgArray[i].Replace("Accept", " ").Replace(": "," ").Trim();
                }
 
               else if (msgArray[i].Contains("User-Agent")){
-                 request.UserAgent = msgArray[i].Replace("User-Agent", " ").Trim();
+                 request.UserAgent = msgArray[i].Replace("User-Agent", " ").Replace(": "," ").Trim();
               }
 
               else if (msgArray[i].Contains("Host")){
-                 request.Host = msgArray[i].Replace("Host", " ").Trim();
+                 request.Host = msgArray[i].Replace("Host", " ").Replace(": "," ").Trim();
               }
         
             }
