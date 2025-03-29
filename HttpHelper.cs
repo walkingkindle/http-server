@@ -34,33 +34,31 @@
         {
             var msgArray = msg.Split(Environment.NewLine);
 
+            HttpRequest request = new HttpRequest();
+
             string endpoint = msgArray[0].Substring(msg.IndexOf("/"), msg.LastIndexOf("HTTP") - msg.IndexOf("/"));
+
+            request.Endpoint = endpoint;
 
             Dictionary<string, string> dict = new();
 
             for(int i = 1; i < msgArray.Length; i++)
             {
               if (msgArray[i].Contains("Accept")){
-                dict.Add("Accept", msgArray[i].Replace("Accept", " ").Trim());
+                  request.Accept = msgArray[i].Replace("Accept", " ").Trim();
                }
 
               else if (msgArray[i].Contains("User-Agent")){
-                dict.Add("User-Agent", msgArray[i].Replace("User-Agent", " ").Trim());
+                 request.UserAgent = msgArray[i].Replace("User-Agent", " ").Trim();
               }
 
               else if (msgArray[i].Contains("Host")){
-                dict.Add("Host", msgArray[i].Replace("Host", " ").Trim());
+                 request.Host = msgArray[i].Replace("Host", " ").Trim();
               }
         
             }
 
-            return new HttpRequest
-            {
-                Endpoint = endpoint,
-                Accept = dict["Accept"].Replace(": ", " ").Trim() ?? "",
-                UserAgent = dict["User-Agent"].Replace(": ", " ").Trim() ?? "",
-                Host = dict["Host"].Replace(": ", " ").Trim() ?? "" 
-            };
+            return request;
 
         }
     }
