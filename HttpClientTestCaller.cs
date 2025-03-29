@@ -9,7 +9,7 @@
             var to = msg.LastIndexOf("HTTP");
             string messageToSSend = msg.Substring(from, to - from);
 
-            return messageToSSend.Replace('/', ' ').Trim();
+            return messageToSSend.Replace("echo", " ").Replace('/', ' ').Trim();
         }
     }
 }
