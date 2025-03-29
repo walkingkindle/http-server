@@ -40,7 +40,7 @@
 
             for(int i = 1; i < msgArray.Length; i++)
             {
-              if (msgArray[i].Contains(nameof(HttpRequest.Accept))){
+              if (msgArray[i].Contains("Accept")){
                 dict.Add("Accept", msgArray[i].Replace("Accept", " ").Trim());
                }
 
@@ -57,9 +57,9 @@
             return new HttpRequest
             {
                 Endpoint = endpoint,
-                Accept = dict["Accept"].Replace(": ", " ").Trim() ?? null,
-                UserAgent = dict["User-Agent"].Replace(": ", " ").Trim() ?? null,
-                Host = dict["Host"].Replace(": ", " ").Trim() ?? null
+                Accept = dict["Accept"].Replace(": ", " ").Trim() ?? "",
+                UserAgent = dict["User-Agent"].Replace(": ", " ").Trim() ?? "",
+                Host = dict["Host"].Replace(": ", " ").Trim() ?? "" 
             };
 
         }
