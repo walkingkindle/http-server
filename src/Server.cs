@@ -21,11 +21,11 @@ try
     buffer = new byte[handler.ReceiveBufferSize];
     int bytesRead = await stream.ReadAsync(buffer, 0, handler.ReceiveBufferSize);
     string msg = Encoding.ASCII.GetString(buffer,0, bytesRead);
-    string messageToResend = HttpClientTestCaller.GetMessageToResend(msg);
+    HttpCustomResponse messageToResend = HttpClientTestCaller.GetMessageToResend(msg);
     Console.WriteLine(messageToResend);
-    string responseHeaders = $"HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: {Encoding.UTF8.GetByteCount(messageToResend)}\r\n\r\n";
+    string responseHeaders = $"HTTP/1.1 {messageToResend.StatusCode}\r\nContent-Type: text/plain\r\nContent-Length: {Encoding.UTF8.GetByteCount(messageToResend.ResponseMessage)}\r\n\r\n";
     await stream.WriteAsync(Encoding.UTF8.GetBytes(responseHeaders));
-    await stream.WriteAsync(Encoding.UTF8.GetBytes(messageToResend));
+    await stream.WriteAsync(Encoding.UTF8.GetBytes(messageToResend.ResponseMessage));
 
 }
 finally
