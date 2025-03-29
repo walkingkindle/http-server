@@ -14,7 +14,7 @@
                 return new HttpResponseBody(msgSubstring.Replace("echo", " ").Replace('/', ' ').Trim(), "200 OK");
             }
 
-            if (msg.Contains("user-agent"))
+            if (msgSubstring.Trim() == "/user-agent")
             {
                 return new HttpResponseBody(request.UserAgent, "200 OK");
             }
@@ -34,30 +34,32 @@
         {
             var msgArray = msg.Split(Environment.NewLine);
 
-            string[] keywords = ["Host:", "Accept:", "User-Agent:"];
-
-            string endpoint = msg.Substring(msg.IndexOf("/"), msg.LastIndexOf("HTTP") - msg.IndexOf("/"));
+            string endpoint = msgArray[0].Substring(msg.IndexOf("/"), msg.LastIndexOf("HTTP") - msg.IndexOf("/"));
 
             Dictionary<string, string> dict = new();
 
-            for(int i = 0; i < msgArray.Length; i++)
+            for(int i = 1; i < msgArray.Length; i++)
             {
-                for(int a = 0; a < keywords.Length; a++)
-                {
-                  if (msgArray[i].Contains(keywords[a]))
-                   {
-                    dict.Add(keywords[a].Replace(':', ' ').Trim(), msgArray[i].Replace(keywords[a], " ").Trim());
-                   }
+              if (msgArray[i].Contains(nameof(HttpRequest.Accept))){
+                dict.Add("Accept", msgArray[i].Replace("Accept", " ").Trim());
+               }
 
-                }
+              else if (msgArray[i].Contains("User-Agent")){
+                dict.Add("User-Agent", msgArray[i].Replace("User-Agent", " ").Trim());
+              }
+
+              else if (msgArray[i].Contains("Host")){
+                dict.Add("Host", msgArray[i].Replace("Host", " ").Trim());
+              }
         
             }
 
-            return new HttpRequest {
+            return new HttpRequest
+            {
                 Endpoint = endpoint,
-                Accept = dict["Accept"],
-                UserAgent = dict["User-Agent"],
-                Host = dict["Host"]
+                Accept = dict["Accept"].Replace(": ", " ").Trim() ?? null,
+                UserAgent = dict["User-Agent"].Replace(": ", " ").Trim() ?? null,
+                Host = dict["Host"].Replace(": ", " ").Trim() ?? null
             };
 
         }
