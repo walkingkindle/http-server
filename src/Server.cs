@@ -1,10 +1,24 @@
+﻿using codecrafters_http_server;
 using System.Net;
 using System.Net.Sockets;
+using System.Text;
 
-// You can use print statements as follows for debugging, they'll be visible when running tests.
-Console.WriteLine("Logs from your program will appear here!");
+var ipEndPoint = new IPEndPoint(IPAddress.Any, 4221);
+TcpListener listener = new(ipEndPoint);
 
-// Uncomment this block to pass the first stage
-TcpListener server = new TcpListener(IPAddress.Any, 4221);
- server.Start();
- server.AcceptSocket(); // wait for client
+  
+listener.Start();
+
+
+while (true)
+{
+    using TcpClient handler = await listener.AcceptTcpClientAsync();
+
+    await using NetworkStream stream = handler.GetStream();
+   
+    var message = "HTTP/1.1 200 OK";
+    var dateTimeBytes = Encoding.UTF8.GetBytes(message);
+    await stream.WriteAsync(dateTimeBytes);
+
+    Console.WriteLine($"Sent message: \"{message}\"");
+}
