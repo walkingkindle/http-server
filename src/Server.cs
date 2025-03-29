@@ -21,23 +21,10 @@ try
     buffer = new byte[handler.ReceiveBufferSize];
     stream.Read(buffer, 0, handler.ReceiveBufferSize);
     string msg = Encoding.ASCII.GetString(buffer);
-    Console.WriteLine(msg);
-    var messageArray = msg.ToCharArray();
-    string messageToReturn = "";
-    for(int i = 0; i < messageArray.Length; i++)
-    {
-        if (messageArray[i] == '/')
-        {
-            messageToReturn = messageArray[i + 1] == ' ' ? "HTTP/1.1 200 OK\r\n\r\n" : "HTTP/1.1 404 Not Found\r\n\r\n";
-            break;
-
-        }
-
-    }
-    var dateTimeBytes = Encoding.UTF8.GetBytes(messageToReturn);
-    await stream.WriteAsync(dateTimeBytes);
-
-    Console.WriteLine($"Sent message: \"{messageToReturn}\"");
+    string messageToResend = HttpClientTestCaller.GetMessageToResend(msg);
+    Console.WriteLine(messageToResend);
+    var messageToSend = Encoding.UTF8.GetBytes($"HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: 3\r\n\r\n{messageToResend}");
+    await stream.WriteAsync(messageToSend);
 
 }
 finally

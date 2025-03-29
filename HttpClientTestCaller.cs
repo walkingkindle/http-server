@@ -3,17 +3,13 @@
     public static class HttpClientTestCaller
     {
 
-        public static async Task CallLocalHostServerBro()
+        public static string GetMessageToResend(string msg)
         {
-            using (var client = new HttpClient())
-            {
-                var response = await client.GetAsync("http://localhost:4221");
+            var from = msg.IndexOf("/");
+            var to = msg.LastIndexOf("HTTP");
+            string messageToSSend = msg.Substring(from, to - from);
 
-                Console.WriteLine(await response.Content.ReadAsStringAsync());
-                
-
-            }
+            return messageToSSend.Replace('/', ' ').Trim();
         }
-
     }
 }
