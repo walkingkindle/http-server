@@ -19,12 +19,13 @@ try
     byte[] buffer = Array.Empty<byte>();
 
     buffer = new byte[handler.ReceiveBufferSize];
-    stream.Read(buffer, 0, handler.ReceiveBufferSize);
-    string msg = Encoding.ASCII.GetString(buffer);
+    int bytesRead = await stream.ReadAsync(buffer, 0, handler.ReceiveBufferSize);
+    string msg = Encoding.ASCII.GetString(buffer,0, bytesRead);
     string messageToResend = HttpClientTestCaller.GetMessageToResend(msg);
     Console.WriteLine(messageToResend);
-    var messageToSend = Encoding.UTF8.GetBytes($"HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: 3\r\n\r\n{messageToResend}");
-    await stream.WriteAsync(messageToSend);
+    string responseHeaders = $"HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: {Encoding.UTF8.GetByteCount(messageToResend)}\r\n\r\n";
+    await stream.WriteAsync(Encoding.UTF8.GetBytes(responseHeaders));
+    await stream.WriteAsync(Encoding.UTF8.GetBytes(messageToResend));
 
 }
 finally
