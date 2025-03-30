@@ -9,7 +9,7 @@ namespace codecrafters_http_server.Routes.GET
 
         public override HttpResponse HandleRoute(HttpRequest request)
         {  
-            return new HttpResponse("", "200 OK", "text/plain", Encoding.UTF8.GetByteCount(""));
+            return new HttpResponse("", HttpStatusCodes.GetHttpResponseStatus(HttpStatusCodes.OK), "text/plain", Encoding.UTF8.GetByteCount(""));
         }
     }
 }

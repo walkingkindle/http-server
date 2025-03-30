@@ -11,11 +11,11 @@ namespace codecrafters_http_server.Routes.GET
         {
             if (request.UserAgent is not null)
             {
-                return new HttpResponse(request.UserAgent, HttpStatusCodes.OK, HTTPContentType.TextType, Encoding.UTF8.GetByteCount(request.UserAgent));
+                return new HttpResponse(request.UserAgent, HttpStatusCodes.GetHttpResponseStatus(HttpStatusCodes.OK), HTTPContentType.TextType, Encoding.UTF8.GetByteCount(request.UserAgent));
             }
             else
             {
-                return new HttpResponse("", HttpStatusCodes.NotFound, HTTPContentType.TextType, Encoding.UTF8.GetByteCount(""));
+                return new HttpResponse("", HttpStatusCodes.GetHttpResponseStatus(HttpStatusCodes.NotFound), HTTPContentType.TextType, Encoding.UTF8.GetByteCount(""));
             }
 
         }

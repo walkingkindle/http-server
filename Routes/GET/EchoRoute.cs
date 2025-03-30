@@ -11,7 +11,7 @@ namespace codecrafters_http_server.Routes.GET
         public override HttpResponse HandleRoute(HttpRequest request)
         {
             string message = request.Endpoint.Replace(_endpoint, "").Replace("/", "").Trim();
-            return new HttpResponse(message,"200 OK", "text/plain", Encoding.UTF8.GetByteCount(message));
+            return new HttpResponse(message,HttpStatusCodes.GetHttpResponseStatus(HttpStatusCodes.OK), "text/plain", Encoding.UTF8.GetByteCount(message));
 
         }
     }

@@ -89,7 +89,7 @@ namespace codecrafters_http_server
 
         public static string BuildHeaders(HttpResponse response)
         {
-            return $"HTTP/1.1 {response.StatusCode}\r\nContent-Type: {response.ContentType}\r\nContent-Length: {response.SizeInBytes}\r\n\r\n"; 
+            return $"{response.StatusCode}\r\nContent-Type: {response.ContentType}\r\nContent-Length: {response.SizeInBytes}\r\n\r\n"; 
         }
     }
 }

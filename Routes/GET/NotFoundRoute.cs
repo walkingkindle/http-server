@@ -9,7 +9,7 @@
 
         public override HttpResponse HandleRoute(HttpRequest request)
         {
-            return new HttpResponse ("", HttpStatusCodes.NotFound, HTTPContentType.TextType,0);
+            return new HttpResponse ("", HttpStatusCodes.GetHttpResponseStatus(HttpStatusCodes.NotFound), HTTPContentType.TextType,0);
         }
     }
 }

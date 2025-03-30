@@ -9,5 +9,12 @@
         public static readonly string NotFound = "404 Not Found";
 
         public static readonly string InternalServerError = "500 Internal Server Error";
+
+        public static string GetHttpResponseStatus(string status)
+        {
+            return "HTTP/1.1 " + status;
+        }
     }
+
+
 }

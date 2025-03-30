@@ -20,7 +20,7 @@
                 Console.WriteLine("File exists");
             }
 
-            return new HttpResponse("", HttpStatusCodes.Created, "", 0);
+            return new HttpResponse("",HttpStatusCodes.GetHttpResponseStatus(HttpStatusCodes.Created), "", 0);
 
 
         }
