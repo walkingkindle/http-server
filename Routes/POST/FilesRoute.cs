@@ -15,6 +15,8 @@
 
             FileStream fs = File.Create(filePath);
 
+            File.WriteAllText(filePath, request.Body);
+
             if (File.Exists(filePath))
             {
                 Console.WriteLine("File exists");
