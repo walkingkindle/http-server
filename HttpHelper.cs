@@ -1,4 +1,6 @@
-﻿namespace codecrafters_http_server
+﻿using System.Text;
+
+namespace codecrafters_http_server
 {
     public static class HttpHelper
     {
@@ -11,20 +13,33 @@
 
             if (msg.Contains("echo"))
             {
-                return new HttpResponseBody(msgSubstring.Replace("echo", " ").Replace('/', ' ').Trim(), "200 OK");
+                string message = msgSubstring.Replace("echo", " ").Replace('/', ' ').Trim();
+                return new HttpResponseBody(message,"200 OK", "text/plain", Encoding.UTF8.GetByteCount(message));
             }
 
             if (msgSubstring.Trim() == "/user-agent")
             {
-                return new HttpResponseBody(request.UserAgent, "200 OK");
+                return new HttpResponseBody(request.UserAgent, "200 OK", "text/plain", Encoding.UTF8.GetByteCount(request.UserAgent));
             }
 
             if (msgSubstring.Trim() == "/")
             {
-                return new HttpResponseBody("", "200 OK");
+                return new HttpResponseBody("", "200 OK", "text/plain", Encoding.UTF8.GetByteCount(""));
             }
 
-            return new HttpResponseBody("", "404 Not Found");
+            if(msgSubstring.Trim().StartsWith("/files"))
+            {
+                string fileName = msgSubstring.Replace("/files/", " ").Trim();
+                DirectoryInfo di = new DirectoryInfo(Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory,@"..\..\..\tmp"));
+                FileInfo[] fi = di.GetFiles();
+
+                if (fi.Any(p=> p.Name == fileName))
+                {
+                    return new HttpResponseBody("", "200 OK", "application/octetstream", fi.FirstOrDefault(p => p.Name == fileName).Length);
+                }
+            }
+
+            return new HttpResponseBody("", "404 Not Found","text/plain", Encoding.UTF8.GetByteCount(""));
 
    
             

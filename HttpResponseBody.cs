@@ -6,11 +6,19 @@
 
         public string StatusCode { get; set; }
 
-        public HttpResponseBody(string responseMessage, string statusCode)
+        public string ContentType { get; set; }
+
+        public long SizeInBytes { get; set; }
+
+        public HttpResponseBody(string responseMessage, string statusCode, string contentType, long sizeInBytes)
         {
             ResponseMessage = responseMessage;
 
             StatusCode = statusCode;
+
+            ContentType = contentType;
+
+            SizeInBytes = sizeInBytes;
 
         }
     }

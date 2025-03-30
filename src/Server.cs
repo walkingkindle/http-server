@@ -40,7 +40,7 @@ async Task HandleClient(TcpClient handler)
         HttpResponseBody messageToResend = HttpHelper.GetMessageToResend(msg, request);
         Console.WriteLine(messageToResend.ResponseMessage);
 
-        string responseHeaders = $"HTTP/1.1 {messageToResend.StatusCode}\r\nContent-Type: text/plain\r\nContent-Length: {Encoding.UTF8.GetByteCount(messageToResend.ResponseMessage)}\r\n\r\n";
+        string responseHeaders = $"HTTP/1.1 {messageToResend.StatusCode}\r\nContent-Type: {messageToResend.ContentType}\r\nContent-Length: {messageToResend.SizeInBytes}\r\n\r\n";
         
         await stream.WriteAsync(Encoding.UTF8.GetBytes(responseHeaders));
         await stream.WriteAsync(Encoding.UTF8.GetBytes(messageToResend.ResponseMessage));
