@@ -31,14 +31,11 @@ namespace codecrafters_http_server
             {
                 string fileName = msgSubstring.Replace("/files/", " ").Trim();
                 string directoryPath = GetDirectoryPath(args);
-                DirectoryInfo di = new DirectoryInfo(directoryPath + fileName);
-                FileInfo[] fi = di.GetFiles();
+                var filePath = $"{directoryPath}/{fileName}";
 
-                FileInfo file = fi.FirstOrDefault(p => p.Name == fileName);
-
-                if (file is not null)
+                if (File.Exists(filePath))
                 {
-                    return new HttpResponseBody(File.ReadAllText(file.FullName), "200 OK", "application/octetstream",file.Length );
+                    return new HttpResponseBody(File.ReadAllText(filePath), "200 OK", "application/octetstream",File.ReadAllBytes(filePath).LongLength );
                 }
             }
 
