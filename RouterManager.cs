@@ -19,16 +19,11 @@ namespace codecrafters_http_server
         private string ExtractEndpoint(string wholeEndpoint)
         {
 
-            if(wholeEndpoint.Trim() == "/")
-            {
-                return "/";
-            }
-
             var from = wholeEndpoint.IndexOf("/");
             var to = wholeEndpoint.LastIndexOf("/");
             string msgSubstring = wholeEndpoint.Substring(from, to - from);
 
-            return msgSubstring;
+            return string.IsNullOrEmpty(msgSubstring) ? wholeEndpoint.Trim() : msgSubstring.Trim();
 
         }
     }
