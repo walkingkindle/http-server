@@ -31,7 +31,7 @@ namespace codecrafters_http_server
             {
                 string fileName = msgSubstring.Replace("/files/", " ").Trim();
                 string directoryPath = GetDirectoryPath(args);
-                DirectoryInfo di =  new DirectoryInfo(@"C:\Projects\codecraftersproject\http-server\codecrafters-http-server-csharp" + directoryPath);
+                DirectoryInfo di = new DirectoryInfo(directoryPath + fileName);
                 FileInfo[] fi = di.GetFiles();
 
                 FileInfo file = fi.FirstOrDefault(p => p.Name == fileName);
