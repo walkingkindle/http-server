@@ -34,9 +34,11 @@ namespace codecrafters_http_server
                 DirectoryInfo di =  new DirectoryInfo(@"C:\Projects\codecraftersproject\http-server\codecrafters-http-server-csharp" + directoryPath);
                 FileInfo[] fi = di.GetFiles();
 
-                if (fi.Any(p=> p.Name == fileName))
+                FileInfo file = fi.FirstOrDefault(p => p.Name == fileName);
+
+                if (file is not null)
                 {
-                    return new HttpResponseBody("", "200 OK", "application/octetstream", fi.FirstOrDefault(p => p.Name == fileName).Length);
+                    return new HttpResponseBody(File.ReadAllText(file.FullName), "200 OK", "application/octetstream",file.Length );
                 }
             }
 
