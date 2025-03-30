@@ -35,7 +35,7 @@ namespace codecrafters_http_server
 
                 if (File.Exists(filePath))
                 {
-                    return new HttpResponseBody(File.ReadAllText(filePath), "200 OK", "application/octetstream",File.ReadAllBytes(filePath).LongLength );
+                    return new HttpResponseBody(File.ReadAllText(filePath), "200 OK", "application/octet-stream",File.ReadAllBytes(filePath).LongLength );
                 }
             }
 
