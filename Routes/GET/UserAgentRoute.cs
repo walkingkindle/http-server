@@ -1,11 +1,11 @@
-﻿
-using System.Text;
+﻿using System.Text;
 
-namespace codecrafters_http_server.Routes
+namespace codecrafters_http_server.Routes.GET
 {
     public class UserAgentRoute : IHttpRouteHandler
     {
         public override string _endpoint { get; set; } = "/user-agent";
+        public override string _method { get; set; } = HttpMethod.GET;
 
         public override HttpResponse HandleRoute(HttpRequest request)
         {

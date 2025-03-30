@@ -55,9 +55,13 @@ namespace codecrafters_http_server
 
             string endpoint = msgArray[0].Substring(msgArray[0].IndexOf("/"), msgArray[0].LastIndexOf("HTTP") - msgArray[0].IndexOf("/"));
 
+            request.Method = msgArray[0].Substring(0, msgArray[0].IndexOf("/", StringComparison.Ordinal)).Trim() == "GET" ? HttpMethod.GET : HttpMethod.POST;
+
             request.Endpoint = endpoint;
 
-            Dictionary<string, string> dict = new();
+            int headerEndIndex = msg.IndexOf("\r\n\r\n");
+
+            request.Body = msg.Substring(headerEndIndex + 4);
 
             for(int i = 1; i < msgArray.Length; i++)
             {
@@ -76,7 +80,7 @@ namespace codecrafters_http_server
                 {
                     request.Arguments = args;
                 }
-        
+            
             }
 
             return request;

@@ -1,5 +1,6 @@
 ﻿
 using codecrafters_http_server.Routes;
+using codecrafters_http_server.Routes.GET;
 
 namespace codecrafters_http_server
 {
@@ -9,16 +10,16 @@ namespace codecrafters_http_server
 
         public RouterManager()
         {
-            RouteHandlers = new List<IHttpRouteHandler> { new DefaultRoute(), new UserAgentRoute(), new EchoRoute(), new FilesRoute(), new NotFoundRoute() };
+            RouteHandlers = new List<IHttpRouteHandler> { new DefaultRoute(), new UserAgentRoute(), new EchoRoute(), new FilesRoute(), new NotFoundRoute(), new Routes.POST.FilesRoute() };
         }
         public IHttpRouteHandler? GetHandler(HttpRequest request)
         {
-            IHttpRouteHandler route =  RouteHandlers.FirstOrDefault(p => ExtractEndpoint(request.Endpoint)== p._endpoint);
+            string extractedEndpoint = ExtractEndpoint(request.Endpoint);
+            IHttpRouteHandler route =  RouteHandlers.FirstOrDefault(p => extractedEndpoint == p._endpoint && request.Method == p._method);
 
             if(route is null)
             {
                 return new NotFoundRoute();
-            
             }
             return route;
         }
