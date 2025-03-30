@@ -13,8 +13,6 @@
 
             var filePath = $"{DirectoryHelpers.GetDirectoryPath(request.Arguments)}{fileName}";
 
-            FileStream fs = File.Create(filePath);
-
             File.WriteAllText(filePath, request.Body);
 
             if (File.Exists(filePath))
