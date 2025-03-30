@@ -5,7 +5,7 @@ namespace codecrafters_http_server
     public static class HttpHelper
     {
 
-        public static HttpResponseBody GetMessageToResend(string msg, HttpRequest request)
+        public static HttpResponseBody GetMessageToResend(string msg, HttpRequest request, string[] args=null)
         {
             var from = msg.IndexOf("/");
             var to = msg.LastIndexOf("HTTP");
@@ -30,7 +30,8 @@ namespace codecrafters_http_server
             if(msgSubstring.Trim().StartsWith("/files"))
             {
                 string fileName = msgSubstring.Replace("/files/", " ").Trim();
-                DirectoryInfo di =  new DirectoryInfo(Path.Combine(Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory)?.Parent?.Parent?.Parent?.FullName,"tmp"));
+                string directoryPath = GetDirectoryPath(args);
+                DirectoryInfo di =  new DirectoryInfo(Path.Combine(Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory)?.Parent?.Parent?.Parent?.FullName,directoryPath));
                 FileInfo[] fi = di.GetFiles();
 
                 if (fi.Any(p=> p.Name == fileName))
@@ -43,6 +44,21 @@ namespace codecrafters_http_server
 
    
             
+        }
+
+        private static string GetDirectoryPath(string[] args)
+        {
+            string directoryPath = null;
+    
+            for (int i = 0; i < args.Length; i++)
+            {
+                if (args[i] == "-directory" && i + 1 < args.Length)
+                {
+                    directoryPath = args[i + 1];
+                    break;
+                }
+            }
+            return directoryPath;
         }
 
         public static HttpRequest GetRequestInfo(string msg)
