@@ -18,7 +18,9 @@ namespace codecrafters_http_server
             if(route is null)
             {
                 return new NotFoundRoute();
+            
             }
+            return route;
         }
 
         private string ExtractEndpoint(string wholeEndpoint)
