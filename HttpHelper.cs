@@ -30,7 +30,7 @@ namespace codecrafters_http_server
             if(msgSubstring.Trim().StartsWith("/files"))
             {
                 string fileName = msgSubstring.Replace("/files/", " ").Trim();
-                DirectoryInfo di = new DirectoryInfo(Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory,@"..\..\..\tmp"));
+                DirectoryInfo di =  new DirectoryInfo(Path.Combine(Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory)?.Parent?.Parent?.Parent?.FullName,"tmp"));
                 FileInfo[] fi = di.GetFiles();
 
                 if (fi.Any(p=> p.Name == fileName))
