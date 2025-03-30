@@ -31,7 +31,7 @@ namespace codecrafters_http_server
             {
                 string fileName = msgSubstring.Replace("/files/", " ").Trim();
                 string directoryPath = GetDirectoryPath(args);
-                DirectoryInfo di =  new DirectoryInfo(directoryPath);
+                DirectoryInfo di =  new DirectoryInfo(@"C:\Projects\codecraftersproject\http-server\codecrafters-http-server-csharp" + directoryPath);
                 FileInfo[] fi = di.GetFiles();
 
                 if (fi.Any(p=> p.Name == fileName))
@@ -46,13 +46,13 @@ namespace codecrafters_http_server
             
         }
 
-        private static string GetDirectoryPath(string[] args)
+        public static string GetDirectoryPath(string[] args)
         {
             string directoryPath = null;
     
             for (int i = 0; i < args.Length; i++)
             {
-                if (args[i] == "-directory" && i + 1 < args.Length)
+                if (args[i] == "--directory" && i + 1 < args.Length)
                 {
                     directoryPath = args[i + 1];
                     break;

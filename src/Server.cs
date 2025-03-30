@@ -24,6 +24,11 @@ internal class Program
                 }
                 else
                 {
+                    DirectoryInfo di = new DirectoryInfo(@"C:\Projects\codecraftersproject\http-server\codecrafters-http-server-csharp" + HttpHelper.GetDirectoryPath(args));
+                    if (!Directory.Exists(di.FullName))
+                    {
+                       Directory.CreateDirectory(di.FullName);
+                    }
                     _ = Task.Run(() => HandleClient(handler, args));
                 }
             }
