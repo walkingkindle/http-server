@@ -36,7 +36,7 @@
 
             HttpRequest request = new HttpRequest();
 
-            string endpoint = msgArray[0].Substring(msg.IndexOf("/"), msg.LastIndexOf("HTTP") - msg.IndexOf("/"));
+            string endpoint = msgArray[0].Substring(msgArray[0].IndexOf("/"), msgArray[0].LastIndexOf("HTTP") - msgArray[0].IndexOf("/"));
 
             request.Endpoint = endpoint;
 
