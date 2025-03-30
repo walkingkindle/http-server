@@ -13,7 +13,12 @@ namespace codecrafters_http_server
         }
         public IHttpRouteHandler? GetHandler(HttpRequest request)
         {
-            return RouteHandlers.FirstOrDefault(p => ExtractEndpoint(request.Endpoint)== p._endpoint);
+            IHttpRouteHandler route =  RouteHandlers.FirstOrDefault(p => ExtractEndpoint(request.Endpoint)== p._endpoint);
+
+            if(route is null)
+            {
+                return new NotFoundRoute();
+            }
         }
 
         private string ExtractEndpoint(string wholeEndpoint)
