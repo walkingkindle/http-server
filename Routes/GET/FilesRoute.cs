@@ -12,7 +12,7 @@
 
             if (File.Exists(filePath))
             {
-                return new HttpResponse(File.ReadAllText(filePath), HttpStatusCodes.OK, HTTPContentType.FileType,File.ReadAllBytes(filePath).LongLength );
+                return new HttpResponse(File.ReadAllText(filePath), HttpStatusCodes.GetHttpResponseStatus(HttpStatusCodes.OK), HTTPContentType.FileType,File.ReadAllBytes(filePath).LongLength );
             }
 
             return new HttpResponse("", HttpStatusCodes.GetHttpResponseStatus(HttpStatusCodes.NotFound), HTTPContentType.FileType, 0);
