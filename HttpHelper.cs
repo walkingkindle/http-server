@@ -2,65 +2,52 @@
 
 namespace codecrafters_http_server
 {
-    public static class HttpHelper
+    public class HttpHelper
     {
+      
+        
 
-        public static HttpResponseBody GetMessageToResend(string msg, HttpRequest request, string[] args=null)
-        {
-            var from = msg.IndexOf("/");
-            var to = msg.LastIndexOf("HTTP");
-            string msgSubstring = msg.Substring(from, to - from);
+        //public HttpResponseBody GetMessageToResend(string msg, HttpRequest request, string filePath = null)
+        //{
+        //    var from = msg.IndexOf("/");
+        //    var to = msg.LastIndexOf("HTTP");
+        //    string msgSubstring = msg.Substring(from, to - from);
 
-            if (msg.Contains("echo"))
-            {
-                string message = msgSubstring.Replace("echo", " ").Replace('/', ' ').Trim();
-                return new HttpResponseBody(message,"200 OK", "text/plain", Encoding.UTF8.GetByteCount(message));
-            }
+        //    if (msgSubstring.Trim() == "/echo")
+        //    {
+        //        string message = msgSubstring.Replace("echo", " ").Replace('/', ' ').Trim();
+        //        return new HttpResponseBody(message,"200 OK", "text/plain", Encoding.UTF8.GetByteCount(message));
+        //    }
 
-            if (msgSubstring.Trim() == "/user-agent")
-            {
-                return new HttpResponseBody(request.UserAgent, "200 OK", "text/plain", Encoding.UTF8.GetByteCount(request.UserAgent));
-            }
+        //    if (msgSubstring.Trim() == "/user-agent")
+        //    {
+        //        return new HttpResponseBody(request.UserAgent, "200 OK", "text/plain", Encoding.UTF8.GetByteCount(request.UserAgent));
+        //    }
 
-            if (msgSubstring.Trim() == "/")
-            {
-                return new HttpResponseBody("", "200 OK", "text/plain", Encoding.UTF8.GetByteCount(""));
-            }
+        //    if (msgSubstring.Trim() == "/")
+        //    {
+        //        return new HttpResponseBody("", "200 OK", "text/plain", Encoding.UTF8.GetByteCount(""));
+        //    }
 
-            if(msgSubstring.Trim().StartsWith("/files"))
-            {
-                string fileName = msgSubstring.Replace("/files/", " ").Trim();
-                string directoryPath = GetDirectoryPath(args);
-                var filePath = $"{directoryPath}/{fileName}";
+        //    if(msgSubstring.Trim().StartsWith("/files"))
+        //    {
+        //        string fileName = msgSubstring.Replace("/files/", " ").Trim();
+        //        var filePath = $"{filepath}/{fileName}";
 
-                if (File.Exists(filePath))
-                {
-                    return new HttpResponseBody(File.ReadAllText(filePath), "200 OK", "application/octet-stream",File.ReadAllBytes(filePath).LongLength );
-                }
-            }
+        //        if (File.Exists(filePath))
+        //        {
+        //            return new HttpResponseBody(File.ReadAllText(filePath), "200 OK", "application/octet-stream",File.ReadAllBytes(filePath).LongLength );
+        //        }
+        //    }
 
-            return new HttpResponseBody("", "404 Not Found","text/plain", Encoding.UTF8.GetByteCount(""));
+        //    return new HttpResponseBody("", "404 Not Found","text/plain", Encoding.UTF8.GetByteCount(""));
 
    
             
-        }
+        //}
 
-        public static string GetDirectoryPath(string[] args)
-        {
-            string directoryPath = null;
-    
-            for (int i = 0; i < args.Length; i++)
-            {
-                if (args[i] == "--directory" && i + 1 < args.Length)
-                {
-                    directoryPath = args[i + 1];
-                    break;
-                }
-            }
-            return directoryPath;
-        }
 
-        public static HttpRequest GetRequestInfo(string msg)
+        public static HttpRequest GetRequestInfo(string msg, string[] args)
         {
             var msgArray = msg.Split(Environment.NewLine);
 
@@ -75,21 +62,30 @@ namespace codecrafters_http_server
             for(int i = 1; i < msgArray.Length; i++)
             {
               if (msgArray[i].Contains("Accept")){
-                  request.Accept = msgArray[i].Replace("Accept", " ").Replace(": "," ").Trim();
+                  request.Accept = msgArray[i].Replace("Accept", "").Replace(": ","").Trim();
                }
 
               else if (msgArray[i].Contains("User-Agent")){
-                 request.UserAgent = msgArray[i].Replace("User-Agent", " ").Replace(": "," ").Trim();
+                 request.UserAgent = msgArray[i].Replace("User-Agent", "").Replace(": ","").Trim();
               }
 
               else if (msgArray[i].Contains("Host")){
-                 request.Host = msgArray[i].Replace("Host", " ").Replace(": "," ").Trim();
+                 request.Host = msgArray[i].Replace("Host", "").Replace(": ","").Trim();
               }
+              else if(args.Length > 0)
+                {
+                    request.Arguments = args;
+                }
         
             }
 
             return request;
 
+        }
+
+        public static string BuildHeaders(HttpResponse response)
+        {
+            return $"{response.ResponseMessage}, {response.StatusCode}, {response.ContentType}, {response.SizeInBytes}"; 
         }
     }
 }

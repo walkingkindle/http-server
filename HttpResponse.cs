@@ -1,6 +1,6 @@
 ﻿namespace codecrafters_http_server
 {
-    public class HttpResponseBody
+    public class HttpResponse
     {
         public string ResponseMessage { get; set; }
 
@@ -10,7 +10,7 @@
 
         public long SizeInBytes { get; set; }
 
-        public HttpResponseBody(string responseMessage, string statusCode, string contentType, long sizeInBytes)
+        public HttpResponse(string responseMessage, string statusCode, string contentType, long sizeInBytes)
         {
             ResponseMessage = responseMessage;
 
