@@ -8,10 +8,17 @@
 
         public override HttpResponse HandleRoute(HttpRequest request)
         {
-            string fileName = request.Endpoint.Replace(_endpoint, "");
-            var filePath = $"{DirectoryHelpers.GetDirectoryPath(request.Arguments)}{fileName.Replace("/","")}";
+
+            string fileName = request.Endpoint.Replace($"{_endpoint}/", "").Trim();
+
+            var filePath = $"{DirectoryHelpers.GetDirectoryPath(request.Arguments)}{fileName}";
 
             FileStream fs = File.Create(filePath);
+
+            if (File.Exists(filePath))
+            {
+                Console.WriteLine("File exists");
+            }
 
             return new HttpResponse("", HttpStatusCodes.Created, "", 0);
 
