@@ -1,6 +1,7 @@
-﻿using System.Text;
+﻿using codecrafters_http_server.src.Domain.Entities;
+using System.Text;
 
-namespace codecrafters_http_server
+namespace codecrafters_http_server.src.Application.Services.Helpers
 {
     public class HttpHelper
     {

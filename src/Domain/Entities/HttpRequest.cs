@@ -1,4 +1,4 @@
-﻿namespace codecrafters_http_server
+﻿namespace codecrafters_http_server.src.Domain.Entities
 {
     public class HttpRequest
     {

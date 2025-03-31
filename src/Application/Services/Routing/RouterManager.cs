@@ -1,8 +1,8 @@
-﻿
-using codecrafters_http_server.Routes;
-using codecrafters_http_server.Routes.GET;
+﻿using codecrafters_http_server.src.Application.Interfaces;
+using codecrafters_http_server.src.Application.Services.Routes.GET;
+using codecrafters_http_server.src.Domain.Entities;
 
-namespace codecrafters_http_server
+namespace codecrafters_http_server.src.Application.Services.Routing
 {
     public class RouterManager : IRouteManager
     {

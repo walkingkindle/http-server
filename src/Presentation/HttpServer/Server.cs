@@ -1,12 +1,15 @@
 ﻿using System.Net;
 using System.Net.Sockets;
 using System.Text;
-using codecrafters_http_server;
+using codecrafters_http_server.src.Application.Services.Helpers;
+using codecrafters_http_server.src.Application.Services.Routing;
+using codecrafters_http_server.src.Domain.Entities;
+using codecrafters_http_server.src.Infrastructure.Networking;
 using CSharpFunctionalExtensions;
 
-internal class Program
+public class Server
 {
-    private static async Task Main(string[] args)
+    public static async Task StartServer(string[] args)
     {
         var ipEndPoint = new IPEndPoint(IPAddress.Any, 4221);
         TcpListener listener = new(ipEndPoint);

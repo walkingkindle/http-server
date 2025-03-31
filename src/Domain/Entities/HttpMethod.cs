@@ -1,6 +1,6 @@
 ﻿using CSharpFunctionalExtensions;
 
-namespace codecrafters_http_server
+namespace codecrafters_http_server.src.Domain.Entities
 {
     public class HttpMethod:ValueObject<HttpMethod>
     {

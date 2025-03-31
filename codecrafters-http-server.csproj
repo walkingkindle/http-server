@@ -9,11 +9,18 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Folder Include="src\Application\Strategies\" />
+    <Folder Include="src\Application\Requests\" />
+    <Folder Include="src\Domain\ValueObjects\" />
+    <Folder Include="src\Infrastructure\Configuration\" />
+    <Folder Include="src\Infrastructure\Persistence\" />
     <Folder Include="tmp\" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="CSharpFunctionalExtensions" Version="3.5.1" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.3" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.3" />
   </ItemGroup>
 
 </Project>

@@ -1,8 +1,11 @@
-﻿using CSharpFunctionalExtensions;
+﻿using codecrafters_http_server.src.Domain.Entities;
+using CSharpFunctionalExtensions;
 using System.Net.Sockets;
 using System.Text;
+using HttpMethod = codecrafters_http_server.src.Domain.Entities.HttpMethod;
 
-namespace codecrafters_http_server
+
+namespace codecrafters_http_server.src.Infrastructure.Networking
 {
     public class NetworkStreamReader
     {

@@ -1,4 +1,4 @@
-﻿namespace codecrafters_http_server
+﻿namespace codecrafters_http_server.src.Application.Services.Helpers
 {
     public static class DirectoryHelpers
     {
