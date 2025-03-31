@@ -2,20 +2,18 @@
 {
     public class FilesRoute : IHttpRouteHandler
     {
-        public override string _endpoint { get; set; } = "/files";
-
-        public override string _method { get; set; } = HttpMethod.GET;
+        public override string _route { get; set; } = "/files";
+        public override HttpMethod _method { get; set; } = HttpMethod.Create(HttpMethod.GET).Value;
         public override HttpResponse HandleRoute(HttpRequest request)
         {
-            string fileName = request.Endpoint.Replace("/files/", "").Trim();
-            var filePath = $"{DirectoryHelpers.GetDirectoryPath(request.Arguments)}{fileName}";
+            var filePath = $"{DirectoryHelpers.GetDirectoryPath(request.Arguments)}{request.Endpoint.Query}";
 
             if (File.Exists(filePath))
             {
-                return new HttpResponse(File.ReadAllText(filePath), HttpStatusCodes.GetHttpResponseStatus(HttpStatusCodes.OK), HTTPContentType.FileType,File.ReadAllBytes(filePath).LongLength );
+                return new HttpResponse(File.ReadAllText(filePath), HttpStatusCodes.GetHttpResponseStatus(HttpStatusCodes.OK), HttpContentType.Create(HttpContentType.FileType).Value.ToString(),File.ReadAllBytes(filePath).LongLength );
             }
 
-            return new HttpResponse("", HttpStatusCodes.GetHttpResponseStatus(HttpStatusCodes.NotFound), HTTPContentType.FileType, 0);
+            return new HttpResponse("", HttpStatusCodes.GetHttpResponseStatus(HttpStatusCodes.NotFound), HttpContentType.FileType, 0);
         }
 
     

@@ -14,25 +14,13 @@ namespace codecrafters_http_server
         }
         public IHttpRouteHandler? GetHandler(HttpRequest request)
         {
-            string extractedEndpoint = ExtractEndpoint(request.Endpoint);
-            IHttpRouteHandler route =  RouteHandlers.FirstOrDefault(p => extractedEndpoint == p._endpoint && request.Method == p._method);
+            IHttpRouteHandler route =  RouteHandlers.FirstOrDefault(p => request.Endpoint.Route == p._route && request.Method.Equals(p._method));
 
             if(route is null)
             {
                 return new NotFoundRoute();
             }
             return route;
-        }
-
-        private string ExtractEndpoint(string wholeEndpoint)
-        {
-
-            var from = wholeEndpoint.IndexOf("/");
-            var to = wholeEndpoint.LastIndexOf("/");
-            string msgSubstring = wholeEndpoint.Substring(from, to - from);
-
-            return string.IsNullOrEmpty(msgSubstring) ? wholeEndpoint.Trim() : msgSubstring.Trim();
-
         }
     }
 }

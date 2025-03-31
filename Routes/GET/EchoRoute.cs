@@ -4,14 +4,13 @@ namespace codecrafters_http_server.Routes.GET
 {
     public class EchoRoute : IHttpRouteHandler
     {
-        public override string _endpoint { get; set; } = "/echo";
+        public override string _route { get; set; } = "/echo";
 
-        public override string _method { get; set; } = HttpMethod.GET;
+        public override HttpMethod _method { get; set; } = HttpMethod.Create(HttpMethod.GET).Value;
 
         public override HttpResponse HandleRoute(HttpRequest request)
         {
-            string message = request.Endpoint.Replace(_endpoint, "").Replace("/", "").Trim();
-            return new HttpResponse(message,HttpStatusCodes.GetHttpResponseStatus(HttpStatusCodes.OK), "text/plain", Encoding.UTF8.GetByteCount(message));
+            return new HttpResponse(request.Endpoint.Query,HttpStatusCodes.GetHttpResponseStatus(HttpStatusCodes.OK), "text/plain", Encoding.UTF8.GetByteCount(request.Endpoint.Query));
 
         }
     }

@@ -2,6 +2,7 @@
 using System.Net.Sockets;
 using System.Text;
 using codecrafters_http_server;
+using CSharpFunctionalExtensions;
 
 internal class Program
 {
@@ -11,14 +12,14 @@ internal class Program
         TcpListener listener = new(ipEndPoint);
 
         listener.Start();
-        Console.WriteLine("Server is running on port 4221...");
+        RouterManager routerManager = new RouterManager();
+               Console.WriteLine("Server is running on port 4221...");
 
         try
         {
             while (true)
             {
                 TcpClient handler = await listener.AcceptTcpClientAsync();
-                RouterManager routerManager = new RouterManager();
                 _ = Task.Run(() => HandleClient(handler, args, routerManager));
             }
         }
@@ -37,10 +38,16 @@ internal class Program
             {
                 await using NetworkStream stream = handler.GetStream();
 
-                string msg = await GetStringFromBuffer(handler, stream);
-                HttpRequest request = HttpHelper.GetRequestInfo(msg, args);
+                NetworkStreamReader reader = new NetworkStreamReader(handler, stream, args);
 
-                HttpResponse response = routerManager.GetHandler(request)?.HandleRoute(request);
+                Result<HttpRequest> request = await reader.GetHttpRequestFromBuffer();
+
+                if (request.IsFailure)
+                {
+                    throw new Exception(request.Error);
+                }
+
+                HttpResponse? response = routerManager.GetHandler(request.Value)?.HandleRoute(request.Value);
 
                 await stream.WriteAsync(Encoding.UTF8.GetBytes(HttpHelper.BuildHeaders(response)));
                 await stream.WriteAsync(Encoding.UTF8.GetBytes(response.ResponseMessage));
@@ -56,15 +63,8 @@ internal class Program
         }
     }
 
-    private static async Task<string> GetStringFromBuffer(TcpClient handler, NetworkStream stream)
-    {
-        byte[] buffer = new byte[handler.ReceiveBufferSize];
-        int bytesRead = await stream.ReadAsync(buffer, 0, buffer.Length);
-        if (bytesRead == 0) return null;
-        string msg = Encoding.ASCII.GetString(buffer, 0, bytesRead);
 
-        return msg;
-    }
+
 
  
 

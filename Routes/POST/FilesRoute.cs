@@ -2,16 +2,14 @@
 {
     public class FilesRoute : IHttpRouteHandler
     {
-        public override string _endpoint { get; set; } = "/files";
-        public override string _method { get; set; } = HttpMethod.POST;
+        public override string _route { get; set; } = "/files";
+        public override HttpMethod _method { get; set; } = HttpMethod.Create(HttpMethod.POST).Value;
 
 
         public override HttpResponse HandleRoute(HttpRequest request)
         {
 
-            string fileName = request.Endpoint.Replace($"{_endpoint}/", "").Trim();
-
-            var filePath = $"{DirectoryHelpers.GetDirectoryPath(request.Arguments)}{fileName}";
+            var filePath = $"{DirectoryHelpers.GetDirectoryPath(request.Arguments)}{request.Endpoint.Query}";
 
             File.WriteAllText(filePath, request.Body);
 
