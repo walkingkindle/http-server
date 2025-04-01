@@ -28,15 +28,18 @@ namespace codecrafters_http_server.src.Domain.Entities
 
         private static Endpoint GetEndpointFromValue(string value)
         {
-            if(value.Trim() == "/")
+            if (value.Trim() == "/")
             {
                 return new Endpoint(route: "/", query: "");
             }
+
             string[] values = value.Split('/', StringSplitOptions.RemoveEmptyEntries);
 
-            return new Endpoint($"/{values[0]}", values[1] == null ? "" : values[1].Trim());
+            string route = values.Length > 0 ? $"/{values[0]}" : "/";
+            string query = values.Length > 1 ? values[1].Trim() : "";
 
-        }
+            return new Endpoint(route, query);
+            }
 
         protected override IEnumerable<object> GetEqualityComponents()
         {
