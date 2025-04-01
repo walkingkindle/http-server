@@ -66,7 +66,20 @@ namespace codecrafters_http_server.src.Infrastructure.Networking
                  request.Host = msgArray[i].Replace("Host", "").Replace(": ","").Trim();
               }
               else if (msgArray[i].Contains("Accept-Encoding")){
-                 request.AcceptEncoding = msgArray[i].Replace("Accept-Encoding", "").Replace(": ", "").Trim();
+                 string contentEncodingArrayStr = msgArray[i].Replace("Accept-Encoding", "").Replace(": ", "").Trim();
+                 string[] contentEncodingArr = contentEncodingArrayStr.Split(',');
+                 List<Result<ContentEncoding>> contentEncodingResults = new();
+
+                   foreach(string contentEncoding in contentEncodingArr)
+                   {
+                        Result<ContentEncoding> contentEncodingResult = ContentEncoding.Create(contentEncoding);
+
+                        if (contentEncodingResult.IsSuccess)
+                        {
+                            contentEncodingResults.Add(contentEncodingResult);
+                        }
+                   }
+                    request.AcceptEncoding = contentEncodingResults.Select(p => p.Value).ToList();
                 }
             }
 

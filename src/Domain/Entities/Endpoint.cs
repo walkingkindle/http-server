@@ -9,9 +9,6 @@ namespace codecrafters_http_server.src.Domain.Entities
 
         public string Query { get; set; }
 
-        private readonly string _route;
-        private readonly string _query;
-
         private Endpoint(string route, string query)
         {
              Route = route;

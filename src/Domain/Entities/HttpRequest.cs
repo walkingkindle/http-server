@@ -8,7 +8,7 @@
         public string Host { get; set; }
         public string UserAgent { get; set; }
         public HttpContentType Accept { get; set; }
-        public string AcceptEncoding { get; set; }
+        public List<ContentEncoding> AcceptEncoding { get; set; }
        public string?[] Arguments { get; set; }
 
     }
