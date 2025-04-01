@@ -10,7 +10,6 @@ namespace codecrafters_http_server.src.Application
     {
         public static IServiceCollection AddApplicationServices(this IServiceCollection services)
         {
-            services.AddTransient<IClientHandlerService, ClientHandlerService>();
 
             services.AddTransient<IHttpRouteHandler, DefaultRouteHandler>();
 
@@ -24,7 +23,7 @@ namespace codecrafters_http_server.src.Application
 
             services.AddTransient<IHttpRouteHandler, Services.Routes.POST.FilesRouteHandler>();
 
-            services.AddScoped<IRouteManagerService, RouteManagerService>();
+            services.AddTransient<IRouteManagerService, RouteManagerService>();
 
             return services; 
         }

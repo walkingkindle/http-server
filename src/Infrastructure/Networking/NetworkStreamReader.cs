@@ -10,17 +10,13 @@ namespace codecrafters_http_server.src.Infrastructure.Networking
 {
     public class NetworkStreamReader:INetworkStreamReader
     {
-        private readonly TcpClient _handler;
-        private readonly NetworkStream _stream;
-        public NetworkStreamReader(TcpClient handler, NetworkStream stream)
+        public NetworkStreamReader()
         {
-            _handler = handler;
-            _stream = stream;
         }
 
-        public async Task<Result<HttpRequest>> GetHttpRequestFromBuffer(string[] args)
+        public async Task<Result<HttpRequest>> GetHttpRequestFromBuffer(string[] args, NetworkStream stream, TcpClient handler)
         {
-            Result<string> bufferString = await GetMessageStringFromBuffer();
+            Result<string> bufferString = await GetMessageStringFromBuffer(stream, handler);
 
             if (bufferString.IsFailure)
             {
@@ -30,10 +26,10 @@ namespace codecrafters_http_server.src.Infrastructure.Networking
               
         }
 
-        private async Task<Result<string>> GetMessageStringFromBuffer()
+        private async Task<Result<string>> GetMessageStringFromBuffer(NetworkStream stream, TcpClient handler)
         {
-            byte[] buffer = new byte[_handler.ReceiveBufferSize];
-            int bytesRead = await _stream.ReadAsync(buffer, 0, buffer.Length);
+            byte[] buffer = new byte[handler.ReceiveBufferSize];
+            int bytesRead = await stream.ReadAsync(buffer, 0, buffer.Length);
             if (bytesRead == 0) return Result.Failure<string>("Did not read anything from the buffer.");
             string msg = Encoding.ASCII.GetString(buffer, 0, bytesRead);
 

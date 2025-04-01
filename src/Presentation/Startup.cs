@@ -1,5 +1,6 @@
 ﻿using codecrafters_http_server.src.Application;
 using codecrafters_http_server.src.Infrastructure;
+using codecrafters_http_server.src.Presentation.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 using System.Net;
 using System.Net.Sockets;
@@ -16,6 +17,8 @@ namespace codecrafters_http_server.src.Presentation
                 var listener = new TcpListener(ipEndPoint);
                 return listener;
             });
+
+            services.AddScoped<IServer,Server>();
 
             services.AddApplicationServices();
 

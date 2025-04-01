@@ -3,6 +3,7 @@ using codecrafters_http_server.src.Application.Services;
 using codecrafters_http_server.src.Application.Services.Helpers;
 using codecrafters_http_server.src.Application.Services.Routing;
 using codecrafters_http_server.src.Infrastructure.Networking;
+using codecrafters_http_server.src.Presentation.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
@@ -33,7 +34,7 @@ namespace codecrafters_http_server.src.Presentation
     {
         var listener = host.Services.GetRequiredService<TcpListener>();
         var routerManager = host.Services.GetRequiredService<IRouteManagerService>();
-        var clientHandler = host.Services.GetRequiredService<IClientHandlerService>();
+        var clientHandler = host.Services.GetRequiredService<IServer>();
 
         listener.Start();
         Console.WriteLine("Server is running on port 4221...");
@@ -43,7 +44,8 @@ namespace codecrafters_http_server.src.Presentation
             while (true)
             {
                 var handler = await listener.AcceptTcpClientAsync();
-                _ = Task.Run(() => clientHandler.HandleClientAsync(handler, args));
+                var stream = handler.GetStream();
+                _ = Task.Run(() => clientHandler.HandleClient(handler, stream, args));
             }
         }
         catch (Exception ex)
