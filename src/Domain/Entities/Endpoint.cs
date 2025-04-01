@@ -30,7 +30,7 @@ namespace codecrafters_http_server.src.Domain.Entities
         {
             string[] values = value.Split('/', StringSplitOptions.RemoveEmptyEntries);
 
-            return new Endpoint($"/{values[0]}", values[1] ?? "");
+            return new Endpoint($"/{values[0]}", values[1].Trim() ?? "");
 
         }
 
