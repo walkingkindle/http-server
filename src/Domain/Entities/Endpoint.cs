@@ -28,9 +28,13 @@ namespace codecrafters_http_server.src.Domain.Entities
 
         private static Endpoint GetEndpointFromValue(string value)
         {
+            if(value.Trim() == "/")
+            {
+                return new Endpoint(route: "/", query: "");
+            }
             string[] values = value.Split('/', StringSplitOptions.RemoveEmptyEntries);
 
-            return new Endpoint($"/{values[0]}", values[1].Trim() ?? "");
+            return new Endpoint($"/{values[0]}", values[1] == null ? "" : values[1].Trim());
 
         }
 
