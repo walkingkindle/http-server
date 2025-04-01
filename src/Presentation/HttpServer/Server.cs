@@ -28,7 +28,7 @@ public class Server:IServer
                 throw new Exception(request.Error);
             }
 
-            HttpResponse? response = _routeManagerService.GetHandler(request.Value)?.HandleRoute(request.Value);
+            HttpResponse? response = _routeManagerService.GetHandler(request.Value.Endpoint, request.Value.Method)?.HandleRoute(request.Value);
 
             await stream.WriteAsync(Encoding.UTF8.GetBytes(HttpHelper.BuildHeaders(response)));
             await stream.WriteAsync(Encoding.UTF8.GetBytes(response.ResponseMessage));
