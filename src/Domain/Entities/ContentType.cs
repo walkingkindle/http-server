@@ -24,7 +24,6 @@ namespace codecrafters_http_server.src.Domain.Entities
             var validTypes = new HashSet<string> { TextType, JsonType, FileType, Everything};
 
             return httpContent.ToResult("HttpContent cannot be null")
-                .Map(httpContentType => httpContentType.Trim())
                 .Ensure(p => validTypes.Contains(p), "httpContent is invalid or not supported")
                 .Map(httpContentType => new HttpContentType(httpContentType));
         }

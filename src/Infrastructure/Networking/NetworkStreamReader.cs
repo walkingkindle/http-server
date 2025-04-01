@@ -54,8 +54,8 @@ namespace codecrafters_http_server.src.Infrastructure.Networking
 
             for(int i = 1; i < msgArray.Length; i++)
             {
-              if (msgArray[i].Contains("Accept")){
-                  contentTypeResult = HttpContentType.Create(msgArray[i].Replace("Accept", "").Replace(": ",""));
+              if (msgArray[i].Contains("Accept:")){
+                  contentTypeResult = HttpContentType.Create(msgArray[i].Replace("Accept: ", "").Trim());
                }
 
               else if (msgArray[i].Contains("User-Agent")){
@@ -84,6 +84,7 @@ namespace codecrafters_http_server.src.Infrastructure.Networking
             request.Accept = contentTypeResult.Value;
             request.Method = httpMethodResult.Value;
             request.Endpoint = endpointResult.Value;
+
            
 
             return request;
