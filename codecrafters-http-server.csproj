@@ -9,11 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="src\Application\Strategies\" />
     <Folder Include="src\Application\Requests\" />
-    <Folder Include="src\Domain\ValueObjects\" />
-    <Folder Include="src\Infrastructure\Configuration\" />
-    <Folder Include="src\Infrastructure\Persistence\" />
     <Folder Include="tmp\" />
   </ItemGroup>
 

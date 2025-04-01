@@ -1,29 +1,39 @@
 ﻿using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using codecrafters_http_server.src.Application.Interfaces;
 using codecrafters_http_server.src.Application.Services.Helpers;
-using codecrafters_http_server.src.Application.Services.Routing;
 using codecrafters_http_server.src.Domain.Entities;
+using codecrafters_http_server.src.Infrastructure.Interfaces;
 using codecrafters_http_server.src.Infrastructure.Networking;
 using CSharpFunctionalExtensions;
 
 public class Server
 {
-    public static async Task StartServer(string[] args)
+    private readonly IRouteManagerService _routeManagerService;
+    private readonly string[] _args;
+    private readonly INetworkStreamReader _streamReader;
+    public Server(IRouteManagerService routeManagerService, string[] args, INetworkStreamReader streamReader)
+    {
+        _routeManagerService = routeManagerService;
+        _args = args;
+        _streamReader = streamReader;
+    }
+
+    public async Task StartServer()
     {
         var ipEndPoint = new IPEndPoint(IPAddress.Any, 4221);
         TcpListener listener = new(ipEndPoint);
 
         listener.Start();
-        RouterManager routerManager = new RouterManager();
-               Console.WriteLine("Server is running on port 4221...");
+        Console.WriteLine("Server is running on port 4221...");
 
         try
         {
             while (true)
             {
                 TcpClient handler = await listener.AcceptTcpClientAsync();
-                _ = Task.Run(() => HandleClient(handler, args, routerManager));
+                _ = Task.Run(() => HandleClient(handler, _args));
             }
         }
         catch (Exception ex)
@@ -34,23 +44,22 @@ public class Server
         {
             listener.Stop();
         }
+    }
 
-        async Task HandleClient(TcpClient handler, string[] args, RouterManager routerManager)
+        private async Task HandleClient(TcpClient handler, string[] args)
         {
             try
             {
                 await using NetworkStream stream = handler.GetStream();
 
-                NetworkStreamReader reader = new NetworkStreamReader(handler, stream, args);
-
-                Result<HttpRequest> request = await reader.GetHttpRequestFromBuffer();
+                Result<HttpRequest> request = await _streamReader.GetHttpRequestFromBuffer(args);
 
                 if (request.IsFailure)
                 {
                     throw new Exception(request.Error);
                 }
 
-                HttpResponse? response = routerManager.GetHandler(request.Value)?.HandleRoute(request.Value);
+                HttpResponse? response = _routeManagerService.GetHandler(request.Value)?.HandleRoute(request.Value);
 
                 await stream.WriteAsync(Encoding.UTF8.GetBytes(HttpHelper.BuildHeaders(response)));
                 await stream.WriteAsync(Encoding.UTF8.GetBytes(response.ResponseMessage));
@@ -65,10 +74,3 @@ public class Server
             }
         }
     }
-
-
-
-
- 
-
-}

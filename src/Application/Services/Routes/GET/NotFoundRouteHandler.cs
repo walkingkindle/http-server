@@ -5,7 +5,7 @@ using HttpMethod = codecrafters_http_server.src.Domain.Entities.HttpMethod;
 
 namespace codecrafters_http_server.src.Application.Services.Routes.GET
 {
-    class NotFoundRoute : IHttpRouteHandler
+    class NotFoundRouteHandler : IHttpRouteHandler
     {
         public override string _route { get; set; } = null;
 

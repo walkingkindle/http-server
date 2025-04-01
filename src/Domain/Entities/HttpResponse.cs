@@ -10,9 +10,9 @@
 
         public long SizeInBytes { get; set; }
 
-        public string ContentEncoding { get; set; }
+        public string? ContentEncoding { get; set; }
 
-        public HttpResponse(string responseMessage, string statusCode, string contentType, long sizeInBytes)
+        public HttpResponse(string responseMessage, string statusCode, string contentType, long sizeInBytes, string contentEncoding=null)
         {
             ResponseMessage = responseMessage;
 
@@ -21,6 +21,8 @@
             ContentType = contentType;
 
             SizeInBytes = sizeInBytes;
+
+            ContentEncoding = contentEncoding;
 
         }
     }

@@ -1,14 +1,8 @@
-﻿using codecrafters_http_server.src.Application.Services;
-using codecrafters_http_server.src.Application.Services.Routing;
-using codecrafters_http_server.src.Infrastructure.Networking;
+﻿using codecrafters_http_server.src.Application;
+using codecrafters_http_server.src.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Net.Sockets;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace codecrafters_http_server.src.Presentation
 {
@@ -23,9 +17,9 @@ namespace codecrafters_http_server.src.Presentation
                 return listener;
             });
 
-            services.AddSingleton<RouterManager>();
+            services.AddApplicationServices();
 
-            services.AddScoped<ClientHandlerService>();
+            services.AddInfrastructureServices();
 
         }
 

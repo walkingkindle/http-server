@@ -6,7 +6,7 @@ using HttpMethod = codecrafters_http_server.src.Domain.Entities.HttpMethod;
 
 namespace codecrafters_http_server.src.Application.Services.Routes.POST
 {
-    public class FilesRoute : IHttpRouteHandler
+    public class FilesRouteHandler : IHttpRouteHandler
     {
         public override string _route { get; set; } = "/files";
         public override HttpMethod _method { get; set; } = HttpMethod.Create(HttpMethod.POST).Value;

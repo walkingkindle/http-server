@@ -2,7 +2,7 @@
 
 namespace codecrafters_http_server.src.Application.Interfaces
 {
-    public interface IRouteManager
+    public interface IRouteManagerService
     {
         public IHttpRouteHandler? GetHandler(HttpRequest request);
     }

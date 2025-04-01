@@ -1,4 +1,5 @@
 ﻿using codecrafters_http_server.src.Domain.Entities;
+using codecrafters_http_server.src.Infrastructure.Interfaces;
 using CSharpFunctionalExtensions;
 using System.Net.Sockets;
 using System.Text;
@@ -7,41 +8,39 @@ using HttpMethod = codecrafters_http_server.src.Domain.Entities.HttpMethod;
 
 namespace codecrafters_http_server.src.Infrastructure.Networking
 {
-    public class NetworkStreamReader
+    public class NetworkStreamReader:INetworkStreamReader
     {
         private readonly TcpClient _handler;
         private readonly NetworkStream _stream;
-        private readonly string[] _args;
-        public NetworkStreamReader(TcpClient handler, NetworkStream stream, string[] args)
+        public NetworkStreamReader(TcpClient handler, NetworkStream stream)
         {
             _handler = handler;
             _stream = stream;
-            _args = args;
         }
 
-        public async Task<Result<HttpRequest>> GetHttpRequestFromBuffer()
+        public async Task<Result<HttpRequest>> GetHttpRequestFromBuffer(string[] args)
         {
-            Result<string> bufferString = await GetMessageStringFromBuffer(_handler, _stream);
+            Result<string> bufferString = await GetMessageStringFromBuffer();
 
             if (bufferString.IsFailure)
             {
                 return Result.Failure<HttpRequest>(bufferString.Error);
             }
-            return GetHttpRequestFromStringBuffer(bufferString.Value);
+            return GetHttpRequestFromStringBuffer(bufferString.Value, args);
               
         }
 
-        private async Task<Result<string>> GetMessageStringFromBuffer(TcpClient handler, NetworkStream stream)
+        private async Task<Result<string>> GetMessageStringFromBuffer()
         {
-            byte[] buffer = new byte[handler.ReceiveBufferSize];
-            int bytesRead = await stream.ReadAsync(buffer, 0, buffer.Length);
-            if (bytesRead == 0) return Result.Failure<string>(TcpClientErrors.NullBuffer);
+            byte[] buffer = new byte[_handler.ReceiveBufferSize];
+            int bytesRead = await _stream.ReadAsync(buffer, 0, buffer.Length);
+            if (bytesRead == 0) return Result.Failure<string>("Did not read anything from the buffer.");
             string msg = Encoding.ASCII.GetString(buffer, 0, bytesRead);
 
             return Result.Success(msg);
         }
 
-        private Result<HttpRequest> GetHttpRequestFromStringBuffer(string msg)
+        private Result<HttpRequest> GetHttpRequestFromStringBuffer(string msg, string[] args)
         {
              var msgArray = msg.Split(Environment.NewLine);
 
@@ -70,11 +69,14 @@ namespace codecrafters_http_server.src.Infrastructure.Networking
               else if (msgArray[i].Contains("Host")){
                  request.Host = msgArray[i].Replace("Host", "").Replace(": ","").Trim();
               }
+              else if (msgArray[i].Contains("Accept-Encoding")){
+                 request.AcceptEncoding = msgArray[i].Replace("Accept-Encoding", "").Replace(": ", "").Trim();
+                }
             }
 
-             if(_args.Length > 0)
+             if(args.Length > 0)
              {
-                request.Arguments = _args;
+                request.Arguments = args;
              }
             Result httpRequestResult = Result.Combine(endpointResult, httpMethodResult, contentTypeResult);
 

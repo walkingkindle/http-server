@@ -1,4 +1,5 @@
-﻿using codecrafters_http_server.src.Application.Services;
+﻿using codecrafters_http_server.src.Application.Interfaces;
+using codecrafters_http_server.src.Application.Services;
 using codecrafters_http_server.src.Application.Services.Helpers;
 using codecrafters_http_server.src.Application.Services.Routing;
 using codecrafters_http_server.src.Infrastructure.Networking;
@@ -25,14 +26,14 @@ namespace codecrafters_http_server.src.Presentation
                               });
         var host = builder.Build();
 
-        await StartServer(host);
+        await StartServer(host,args);
     }
 
-    private static async Task StartServer(IHost host)
+    private static async Task StartServer(IHost host, string[] args)
     {
         var listener = host.Services.GetRequiredService<TcpListener>();
-        var routerManager = host.Services.GetRequiredService<RouterManager>();
-        var clientHandlerService = host.Services.GetRequiredService<ClientHandlerService>();
+        var routerManager = host.Services.GetRequiredService<IRouteManagerService>();
+        var clientHandler = host.Services.GetRequiredService<IClientHandlerService>();
 
         listener.Start();
         Console.WriteLine("Server is running on port 4221...");
@@ -42,7 +43,7 @@ namespace codecrafters_http_server.src.Presentation
             while (true)
             {
                 var handler = await listener.AcceptTcpClientAsync();
-                _ = Task.Run(() => clientHandlerService.HandleClientAsync(handler, new string[] { }));
+                _ = Task.Run(() => clientHandler.HandleClientAsync(handler, args));
             }
         }
         catch (Exception ex)
