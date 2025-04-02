@@ -30,9 +30,10 @@ namespace codecrafters_http_server.src.Application.Services.Routes.GET
                     new HttpResponseBody(compressedValue, compressedValue.Length)
 );
             }
+            byte[] response = Encoding.UTF8.GetBytes(request.Endpoint.Query);
             return new HttpResponse(
                 new HttpStatusCode(HttpStatusCode.OK),
-                HttpContentType.Create(HttpContentType.TextType).Value.ToString());
+                HttpContentType.Create(HttpContentType.TextType).Value.ToString(),null, new HttpResponseBody(response, response.Length));
 
             
         }
