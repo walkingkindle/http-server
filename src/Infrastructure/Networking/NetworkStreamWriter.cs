@@ -12,11 +12,11 @@ namespace codecrafters_http_server.src.Infrastructure.Networking
             string headers;
             if (response.ContentEncoding != null)
             {
-                headers = $"{response.StatusCode}\r\nContent-Type: {response.ContentType}\r\nContent-Length: {response.HttpResponseBody.ByteCount}\r\nContent-Encoding:{response.ContentEncoding}\r\n\r\n";
+                headers = $"{response.StatusCode.Value}\r\nContent-Type: {response.ContentType}\r\nContent-Length: {response.HttpResponseBody.ByteCount}\r\nContent-Encoding:{response.ContentEncoding}\r\n\r\n";
             }
             else
             {
-                headers = $"{response.StatusCode}\r\nContent-Type: {response.ContentType}\r\nContent-Length: {response.HttpResponseBody.ByteCount}\r\n\r\n";
+                headers = $"{response.StatusCode.Value}\r\nContent-Type: {response.ContentType}\r\nContent-Length: {response.HttpResponseBody.ByteCount}\r\n\r\n";
             }
 
             await stream.WriteAsync(Encoding.UTF8.GetBytes(headers));
