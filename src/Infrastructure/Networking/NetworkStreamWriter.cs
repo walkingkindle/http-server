@@ -16,13 +16,17 @@ namespace codecrafters_http_server.src.Infrastructure.Networking
             }
             else
             {
-                headers = $"{response.StatusCode.Value}\r\nContent-Type: {response.ContentType}\r\nContent-Length: {response.HttpResponseBody.ByteCount}\r\n\r\n";
+                headers = $"{response.StatusCode.Value}\r\nContent-Type: {response.ContentType}\r\nContent-Length: {(response.HttpResponseBody == null ? 0 :response.HttpResponseBody.ByteCount)}\r\n\r\n";
             }
 
             await stream.WriteAsync(Encoding.UTF8.GetBytes(headers));
         }
         public async ValueTask WriteBodyToStream(HttpResponseBody response, NetworkStream stream)
         {
+            if(response is null)
+            {
+                response = new HttpResponseBody(Encoding.UTF8.GetBytes(""), 0);
+            }
             await stream.WriteAsync(response.ResponseBody);
         }
     }
