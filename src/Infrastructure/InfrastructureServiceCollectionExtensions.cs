@@ -10,6 +10,8 @@ namespace codecrafters_http_server.src.Infrastructure
         {
             services.AddTransient<INetworkStreamReader, NetworkStreamReader>();
 
+            services.AddTransient<INetworkStreamWriter, NetworkStreamWriter>();
+
             return services;
 
         }
