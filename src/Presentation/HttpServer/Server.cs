@@ -11,10 +11,12 @@ public class Server:IServer
 {
     private readonly IRouteManagerService _routeManagerService;
     private readonly INetworkStreamReader _streamReader;
-    public Server(IRouteManagerService routeManagerService, INetworkStreamReader streamReader)
+    private readonly INetworkStreamWriter _streamWriter;
+    public Server(IRouteManagerService routeManagerService, INetworkStreamReader streamReader,INetworkStreamWriter streamWriter)
     {
         _routeManagerService = routeManagerService;
         _streamReader = streamReader;
+        _streamWriter = streamWriter;
     }
 
     public async Task HandleClient(TcpClient handler, NetworkStream stream, string[] args)
@@ -30,8 +32,8 @@ public class Server:IServer
 
             HttpResponse? response = _routeManagerService.GetHandler(request.Value.Endpoint, request.Value.Method)?.HandleRoute(request.Value);
 
-            await stream.WriteAsync(Encoding.UTF8.GetBytes(HttpHelper.BuildHeaders(response)));
-            await stream.WriteAsync(Encoding.UTF8.GetBytes(response.ResponseMessage));
+            await _streamWriter.WriteHeadersToStream(response, stream);
+            await _streamWriter.WriteBodyToStream(response.HttpResponseBody, stream);
         }
         catch (Exception ex)
         {

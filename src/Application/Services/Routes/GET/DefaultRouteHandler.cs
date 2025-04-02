@@ -11,8 +11,10 @@ namespace codecrafters_http_server.src.Application.Services.Routes.GET
         public override Domain.Entities.HttpMethod _method { get; set; } = HttpMethod.Create(HttpMethod.GET).Value;
 
         public override HttpResponse HandleRoute(HttpRequest request)
-        {  
-            return new HttpResponse("", HttpStatusCodes.GetHttpResponseStatus(HttpStatusCodes.OK), "text/plain", Encoding.UTF8.GetByteCount(""));
+        {
+            return new HttpResponse(
+                new HttpStatusCode(HttpStatusCode.OK),
+                HttpContentType.Create(HttpContentType.TextType).Value.ToString());
         }
     }
 }

@@ -14,7 +14,7 @@ namespace codecrafters_http_server.src.Application.Services.Routes.GET
 
         public override HttpResponse HandleRoute(HttpRequest request)
         {
-            return new HttpResponse ("", HttpStatusCodes.GetHttpResponseStatus(HttpStatusCodes.NotFound), HttpContentType.TextType,0);
+            return new HttpResponse(new HttpStatusCode(HttpStatusCode.NotFound), HttpContentType.TextType);
         }
     }
 }

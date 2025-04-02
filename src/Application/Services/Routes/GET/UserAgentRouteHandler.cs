@@ -1,4 +1,5 @@
 ﻿using codecrafters_http_server.src.Application.Interfaces;
+using codecrafters_http_server.src.Application.Services.Helpers;
 using codecrafters_http_server.src.Domain.Entities;
 using System.Text;
 using HttpMethod = codecrafters_http_server.src.Domain.Entities.HttpMethod;
@@ -15,11 +16,17 @@ namespace codecrafters_http_server.src.Application.Services.Routes.GET
         {
             if (request.UserAgent is not null)
             {
-                return new HttpResponse(request.UserAgent, HttpStatusCodes.GetHttpResponseStatus(HttpStatusCodes.OK), HttpContentType.TextType, Encoding.UTF8.GetByteCount(request.UserAgent));
+                return new HttpResponse(
+                    new HttpStatusCode(HttpStatusCode.OK),
+                    HttpContentType.TextType,
+                    null,
+                    new HttpResponseBody(HttpHelper.GetBytesFromString(request.UserAgent), Encoding.UTF8.GetByteCount(request.UserAgent)));
+
             }
             else
             {
-                return new HttpResponse("", HttpStatusCodes.GetHttpResponseStatus(HttpStatusCodes.NotFound), HttpContentType.TextType, Encoding.UTF8.GetByteCount(""));
+                return new HttpResponse(new HttpStatusCode(HttpStatusCode.NotFound),
+                    HttpContentType.TextType);
             }
 
         }

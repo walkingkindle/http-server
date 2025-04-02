@@ -2,27 +2,24 @@
 {
     public class HttpResponse
     {
-        public string ResponseMessage { get; set; }
-
-        public string StatusCode { get; set; }
+        public HttpStatusCode StatusCode { get; set; }
 
         public string ContentType { get; set; }
 
-        public long SizeInBytes { get; set; }
-
         public string? ContentEncoding { get; set; }
 
-        public HttpResponse(string responseMessage, string statusCode, string contentType, long sizeInBytes, string contentEncoding=null)
+        public HttpResponseBody HttpResponseBody { get; set; }
+
+        public HttpResponse(HttpStatusCode statusCode, string contentType, string contentEncoding=null, HttpResponseBody responseBody = null)
         {
-            ResponseMessage = responseMessage;
 
             StatusCode = statusCode;
 
             ContentType = contentType;
 
-            SizeInBytes = sizeInBytes;
-
             ContentEncoding = contentEncoding;
+
+            HttpResponseBody = responseBody;
 
         }
     }

@@ -18,21 +18,21 @@ namespace codecrafters_http_server.src.Application.Services.Routes.GET
             if (!request.AcceptEncoding.IsNullOrEmpty())
             {
                string encodings = string.Join(',', request.AcceptEncoding.Select(p=> p.Value));
-                string compressedValue = "";
+                byte[] compressedValue = Array.Empty<byte>();
                if(encodings == "gzip")
                {
                    compressedValue = HttpHelper.CompressStringGzip(request.Endpoint.Query);
                }
-               return new HttpResponse(compressedValue, 
-                   HttpStatusCodes.GetHttpResponseStatus(HttpStatusCodes.OK), 
-                   HttpContentType.Create(HttpContentType.TextType).Value.ToString(),
-                   Encoding.UTF8.GetByteCount(request.Endpoint.Query),
-                   encodings);
+                return new HttpResponse(
+                    new HttpStatusCode(HttpStatusCode.OK),
+                    HttpContentType.Create(HttpContentType.TextType).Value.ToString(),
+                    encodings,
+                    new HttpResponseBody(compressedValue, compressedValue.Length)
+);
             }
-            return new HttpResponse(request.Endpoint.Query,
-                HttpStatusCodes.GetHttpResponseStatus(HttpStatusCodes.OK),
-                HttpContentType.Create(HttpContentType.TextType).Value.ToString(),
-                Encoding.UTF8.GetByteCount(request.Endpoint.Query));
+            return new HttpResponse(
+                new HttpStatusCode(HttpStatusCode.OK),
+                HttpContentType.Create(HttpContentType.TextType).Value.ToString());
 
             
         }

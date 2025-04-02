@@ -24,7 +24,7 @@ namespace codecrafters_http_server.src.Application.Services.Routes.POST
                 Console.WriteLine("File exists");
             }
 
-            return new HttpResponse("",HttpStatusCodes.GetHttpResponseStatus(HttpStatusCodes.Created), "", 0);
+            return new HttpResponse(new HttpStatusCode(HttpStatusCode.Created), HttpContentType.FileType);
 
 
         }
